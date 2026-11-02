@@ -22,3 +22,4 @@ services:
 volumes:
   campusconnect_media:
   campusconnect_data:
+
