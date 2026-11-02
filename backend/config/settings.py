@@ -1,4 +1,4 @@
-﻿import os
+import os
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'campusconnect-django-insecure-key-2026')
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 't', 'yes')
 
 ALLOWED_HOSTS = ['*']
 
@@ -142,3 +142,12 @@ SIMPLE_JWT = {
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]

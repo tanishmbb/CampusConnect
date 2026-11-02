@@ -57,9 +57,9 @@ export default function AdminCompanies() {
   };
 
   const filtered = companies.filter((c) =>
-    c.name.toLowerCase().includes(search.toLowerCase()) ||
-    c.industry.toLowerCase().includes(search.toLowerCase()) ||
-    c.location.toLowerCase().includes(search.toLowerCase())
+    (c.name || '').toLowerCase().includes(search.toLowerCase()) ||
+    (c.industry || '').toLowerCase().includes(search.toLowerCase()) ||
+    (c.location || '').toLowerCase().includes(search.toLowerCase())
   );
 
   return (

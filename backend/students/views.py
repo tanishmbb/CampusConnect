@@ -1,4 +1,4 @@
-﻿from rest_framework import viewsets, views, permissions, status
+from rest_framework import viewsets, views, permissions, status
 from rest_framework.response import Response
 from django.db.models import Q
 from .models import Department, Skill, StudentProfile, StudentSkill
@@ -27,7 +27,10 @@ class StudentProfileView(views.APIView):
 
     def put(self, request):
         profile, _ = StudentProfile.objects.get_or_create(user=request.user)
-        serializer = StudentProfileSerializer(profile, data=request.data, partial=True)
+        # Students cannot self-assign placement_status directly
+        data = request.data.copy() if hasattr(request.data, 'copy') else dict(request.data)
+        data.pop('placement_status', None)
+        serializer = StudentProfileSerializer(profile, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

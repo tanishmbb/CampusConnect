@@ -38,11 +38,11 @@ export default function RegisterPage() {
     try {
       const payload = {
         role: formData.role,
-        username: formData.username,
-        email: formData.email,
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-        phone: formData.phone,
+        username: formData.username.trim(),
+        email: formData.email.trim(),
+        first_name: formData.first_name.trim(),
+        last_name: formData.last_name.trim(),
+        phone: formData.phone.trim(),
         password: formData.password,
       };
       await register(payload);
@@ -53,12 +53,18 @@ export default function RegisterPage() {
         navigate('/recruiter/dashboard');
       }
     } catch (err) {
-      const errors = err.response?.data;
-      if (typeof errors === 'object') {
-        const firstKey = Object.keys(errors)[0];
-        setError(`${firstKey}: ${errors[firstKey]}`);
+      console.error('Registration error:', err);
+      if (!err.response) {
+        setError('Cannot connect to backend server! Please start Django backend: run "python manage.py runserver 127.0.0.1:8000" in the backend folder.');
       } else {
-        setError('Failed to create account. Please verify input data.');
+        const errors = err.response?.data;
+        if (typeof errors === 'object' && errors !== null) {
+          const firstKey = Object.keys(errors)[0];
+          const val = Array.isArray(errors[firstKey]) ? errors[firstKey][0] : errors[firstKey];
+          setError(`${firstKey.toUpperCase()}: ${val}`);
+        } else {
+          setError(err.response?.data?.detail || 'Failed to create account. Please verify input data.');
+        }
       }
     } finally {
       setLoading(false);
@@ -105,8 +111,8 @@ export default function RegisterPage() {
         </div>
 
         {error && (
-          <div className="mt-4 p-3 rounded-xl bg-rose-50 border border-rose-200 flex items-center gap-2 text-xs font-semibold text-rose-700">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="mt-4 p-3.5 rounded-xl bg-rose-50 border border-rose-200 flex items-start gap-2 text-xs font-semibold text-rose-700 leading-relaxed">
+            <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>
         )}

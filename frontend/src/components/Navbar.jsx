@@ -36,11 +36,11 @@ export default function Navbar() {
 
           {/* Links */}
           <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-            <a href="#features" className="hover:text-indigo-600 transition">Features</a>
-            <a href="#how-it-works" className="hover:text-indigo-600 transition">How It Works</a>
-            <a href="#companies" className="hover:text-indigo-600 transition">Companies</a>
+            <a href="/#features" className="hover:text-indigo-600 transition">Features</a>
+            <a href="/#how-it-works" className="hover:text-indigo-600 transition">How It Works</a>
+            <a href="/#companies" className="hover:text-indigo-600 transition">Companies</a>
             <Link to="/explore-jobs" className="hover:text-indigo-600 transition">Browse Jobs</Link>
-            <a href="#faq" className="hover:text-indigo-600 transition">FAQ</a>
+            <a href="/#faq" className="hover:text-indigo-600 transition">FAQ</a>
           </div>
 
           {/* Auth Action */}

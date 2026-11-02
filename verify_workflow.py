@@ -41,6 +41,15 @@ assert status == 200, f"Admin login failed: {res}"
 admin_token = res['access']
 print("[SUCCESS] 1. Admin logged in successfully.")
 
+# Ensure demo student is reset to NOT_PLACED for idempotent demo test runs
+status, students_res = request('/students/admin/all/?search=student@campusconnect.com', token=admin_token)
+if status == 200:
+    s_list = students_res.get('results', students_res)
+    if s_list:
+        demo_prof = s_list[0]
+        if demo_prof.get('placement_status') == 'PLACED':
+            request(f"/students/admin/all/{demo_prof['id']}/", method='PATCH', data={'placement_status': 'NOT_PLACED'}, token=admin_token)
+
 # Step 2: Admin views dashboard & analytics
 status, res = request('/analytics/admin/', token=admin_token)
 assert status == 200, f"Admin analytics failed: {res}"

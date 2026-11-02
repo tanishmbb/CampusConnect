@@ -1,4 +1,4 @@
-﻿from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Q
@@ -22,12 +22,23 @@ class CompanyViewSet(viewsets.ModelViewSet):
         queryset = Company.objects.all()
 
         if not user.is_authenticated or user.role == 'STUDENT':
-            return queryset.filter(approval_status='APPROVED', is_active=True)
-
-        if user.role == 'RECRUITER':
+            queryset = queryset.filter(approval_status='APPROVED', is_active=True)
+        elif user.role == 'RECRUITER':
             if hasattr(user, 'recruiter_profile') and user.recruiter_profile.company:
                 company_id = user.recruiter_profile.company.id
-                return queryset.filter(Q(approval_status='APPROVED') | Q(id=company_id))
+                queryset = queryset.filter(Q(approval_status='APPROVED') | Q(id=company_id))
+
+        status_param = self.request.query_params.get('approval_status')
+        if status_param:
+            queryset = queryset.filter(approval_status=status_param)
+
+        search = self.request.query_params.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(name__icontains=search) |
+                Q(industry__icontains=search) |
+                Q(location__icontains=search)
+            )
 
         return queryset
 
