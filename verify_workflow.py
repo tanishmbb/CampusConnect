@@ -18,10 +18,10 @@ def request(endpoint, method='GET', data=None, token=None):
     headers = {'Content-Type': 'application/json'}
     if token:
         headers['Authorization'] = f"Bearer {token}"
-    
+
     encoded_data = json.dumps(data).encode('utf-8') if data else None
     req = urllib.request.Request(url, data=encoded_data, headers=headers, method=method)
-    
+
     try:
         with urllib.request.urlopen(req, timeout=10) as response:
             res_body = response.read().decode('utf-8')

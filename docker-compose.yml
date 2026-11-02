@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: campusconnect_web
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - SECRET_KEY=campusconnect-production-secure-key-docker-deploy-2026
+      - DEBUG=False
+      - ALLOWED_HOSTS=*
+      - USE_MYSQL=False
+      - LOG_LEVEL=INFO
+    volumes:
+      - campusconnect_media:/app/backend/media
+      - campusconnect_data:/app/backend
+
+volumes:
+  campusconnect_media:
+  campusconnect_data:
